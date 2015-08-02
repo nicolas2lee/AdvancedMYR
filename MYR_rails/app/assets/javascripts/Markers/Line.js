@@ -1,9 +1,14 @@
+// regular exp /^([-\+]?\d+(\.\d+)?\,[-\+]?\d+(\.\d+)?\;){1,}$/
 LineMarkers=[]
 var poly=null
 function saveLineMarker(){
 		if ($("#marker_missions_dropdown option:selected").val()==0){
-			alert('Please choose a mission')
-		}else{
+		  swal(
+            'Saved',
+            '',
+            'success'
+      )
+    }else{
 			mission_id=$("#marker_missions_dropdown option:selected").val()
 			if (LineMarkers==[]){
         alert('You do not create any marker, please create some markers before you continue !!!')
@@ -36,37 +41,55 @@ function saveLineMarker(){
 		}
 	}
 
-
 function addFixPolyline(){
-	input=prompt("Please respect the format of input data, otherwise it could not recognize the data: lat,lng;lat,lng;...","lat,lng; lat,lng...")
-	/*====== need to check if th input data format is correct =====*/
-	tabinput=input.split(";")
-	var coord=[]
-  var fixline=[]
-  var fixPath = new google.maps.Polyline({
-    geodesic: true,
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    markers: fixline
+	//input=prompt("Please respect the format of input data, otherwise it could not recognize the data: lat,lng;lat,lng;...","lat,lng; lat,lng...")
+  swal({
+    title: 'Please input coordinates for the fix line',
+    showConfirmButton: false,
+    html:
+		  '<input id="coord-input" type="text"></input><br>' +
+      '<button id="getInputValue" type="button" ><font color="black">Ok</font></button>'
   });
-  fixPath.setMap(map_marker)
-  LineMarkers.push(fixPath)
-  var path=fixPath.getPath()
-  for (var i=0;i<tabinput.length;i++){
-		latlng=tabinput[i].split(",")
-		lat=latlng[0]
-		lng=latlng[1]
-		path.push(new google.maps.LatLng(lat, lng))
-  	var node=addFixMarker(lat, lng)//in Point.js
-		fixPath.markers.push(node)
-    google.maps.event.addListener(node, 'click', showPointInLine);
-		infoWindowLine = new google.maps.InfoWindow();
-	}
+  $("#getInputValue").click(function(){
+    inputValue = $("#coord-input").val()
+    if (inputValue === "") {
+      swal.showInputError("You need to write something!");
+    }else{
+  
+      swal("Nice!", "You wrote: " + inputValue, "success");
+      input = inputValue
+      alert(input)
+/*====== need to check if th input data format is correct =====*/
+		  tabinput=input.split(";")
+		  var coord=[]
+		  var fixline=[]
+		  var fixPath = new google.maps.Polyline({
+		    geodesic: true,
+		    strokeColor: '#FF0000',
+		    strokeOpacity: 1.0,
+		    strokeWeight: 2,
+		    markers: fixline
+		  });
+		  fixPath.setMap(map_marker)
+		  LineMarkers.push(fixPath)
+		  var path=fixPath.getPath()
+		  for (var i=0;i<tabinput.length;i++){
+			  latlng=tabinput[i].split(",")
+			  lat=latlng[0]
+			  lng=latlng[1]
+			  path.push(new google.maps.LatLng(lat, lng))
+			  var node=addFixMarker(lat, lng)//in Point.js
+			  fixPath.markers.push(node)
+		    google.maps.event.addListener(node, 'click', showPointInLine);
+			  infoWindowLine = new google.maps.InfoWindow();
+		  }
+    }
+  })
 }
 
 function addCustomPolyline(){
-	alert('You can add markers by clicking in the map directly')
+	//sweetAlert('You can add markers by clicking in the map directly')
+  swal('You can add your marker by clicking directly on the map.')    
 	var polyOptions = {
     strokeColor: '#000000',
     strokeOpacity: 1.0,
