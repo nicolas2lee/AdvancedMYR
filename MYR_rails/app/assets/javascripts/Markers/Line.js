@@ -51,33 +51,38 @@ function saveLineMarker(){
 		}
 	}
 
-function addFixPolyline(){
-	//input=prompt("Please respect the format of input data, otherwise it could not recognize the data: lat,lng;lat,lng;...","lat,lng; lat,lng...")
+function getInputValue(){
   swal({
     title: 'Creating Line Markers',
     showConfirmButton: false,
     html:
       '<font color=\'#003399\'><b>Name:</b></font><br>'+
-      '<select><option value=\'start\'>Starting line</option>'+
+      '<select><option value=\'blank\'></option>'+
+      '<option value=\'start\'>Starting line</option>'+
       '<option value=\'end\'>Ending line</option>'+
+      '<option value=\'custom\'>Border</option>'+
       '</select><br><br>'+
       '<font color=\'#003399\'><b>Description:</b></font><br>'+
-		  '<input id="line-marker-description" type="text" style=\"width=:200px;height=:150px\"></input><br><br>' +
-      '<font color=\'#003399\'><b>Please input all coordinates and respect the format</b><br>'+
-      '<i>0,0;1,1;...;</i><br>'+
-      'Make sure end with semi-colon ;</font><br>'+
+		  '<input id="line-marker-description" type="text" style=\"width:300px;height:80px\" maxlength=\'150\'></input><br><br>' +
+      '<font color=\'#003399\'><b>Please input all coordinates and respect the format:</b><br>'+
+      '<i>0,0;1,1;...;</i>&nbsp'+
+      'Make sure end with semi-colon ( ; )</font>'+
 		  '<input id="coord-input" type="text"></input><br>' +
-      '<button id="getInputValue" type="button" ><font color="black">Ok</font></button>'
+      '<button id="getInputValue" type="button" ><font color="blue">Ok</font></button>',
+    allowOutsideClick: false
   });
+}
+
+function addFixPolyline(){
+	//input=prompt("Please respect the format of input data, otherwise it could not recognize the data: lat,lng;lat,lng;...","lat,lng; lat,lng...")
+  getInputValue()
   $("#getInputValue").click(function(){
     inputValue = $("#coord-input").val()
     if (inputValue === "") {
       swal.showInputError("You need to write something!");
     }else{
-  
       swal("Nice!", "You wrote: " + inputValue, "success");
       input = inputValue
-      alert(input)
 /*====== need to check if th input data format is correct =====*/
 		  tabinput=input.split(";")
 		  var coord=[]
