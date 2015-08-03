@@ -3,15 +3,20 @@ LineMarkers=[]
 var poly=null
 function saveLineMarker(){
 		if ($("#marker_missions_dropdown option:selected").val()==0){
-		  swal(
-            'Saved',
-            '',
-            'success'
-      )
+      swal({
+            title: 'Warning Message',
+            html: '<font color=\'black\'>Please choose a mission </font>',
+            type: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Ok',
+            allowOutsideClick: false,
+            closeOnConfirm: false
+        })
     }else{
 			mission_id=$("#marker_missions_dropdown option:selected").val()
-			if (LineMarkers==[]){
-        alert('You do not create any marker, please create some markers before you continue !!!')
+      if (LineMarkers.length==0){
+        swal('You do not create any marker, please create some markers before you continue !!!')
       }else{
         for (var j=0;j<LineMarkers.length;j++){
           var Linelat=""
@@ -33,8 +38,13 @@ function saveLineMarker(){
 							data: {	marker: p},
 							dataType: "json",
 							success: function(data){
-								alert('saved')
-							}
+							  swal({
+                  title: 'Saved !',
+                  html:
+                     '<font color=\'black\'>I will close in 2 seconds.',
+                  timer: 2000
+                });
+              }
 			    }) 	
         }
       }
@@ -44,9 +54,18 @@ function saveLineMarker(){
 function addFixPolyline(){
 	//input=prompt("Please respect the format of input data, otherwise it could not recognize the data: lat,lng;lat,lng;...","lat,lng; lat,lng...")
   swal({
-    title: 'Please input coordinates for the fix line',
+    title: 'Creating Line Markers',
     showConfirmButton: false,
     html:
+      '<font color=\'#003399\'><b>Name:</b></font><br>'+
+      '<select><option value=\'start\'>Starting line</option>'+
+      '<option value=\'end\'>Ending line</option>'+
+      '</select><br><br>'+
+      '<font color=\'#003399\'><b>Description:</b></font><br>'+
+		  '<input id="line-marker-description" type="text" style=\"width=:200px;height=:150px\"></input><br><br>' +
+      '<font color=\'#003399\'><b>Please input all coordinates and respect the format</b><br>'+
+      '<i>0,0;1,1;...;</i><br>'+
+      'Make sure end with semi-colon ;</font><br>'+
 		  '<input id="coord-input" type="text"></input><br>' +
       '<button id="getInputValue" type="button" ><font color="black">Ok</font></button>'
   });
